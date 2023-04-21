@@ -30,7 +30,7 @@ addr = "56301" #zip code for requesting solar data that way
 monthly_dni = None
 monthly_ghi = None
 
-figure, axes = plt.subplots(1,3)
+figure, axes = plt.subplots(1,2)
 
 rect1 = None
 rect2 = None
@@ -67,14 +67,14 @@ def redraw():
 
     #Bar graphs are formatted as {'key': value}
     #print(monthly_dni)
-    annual_returns = [annual_cost_savings-cost_of_system]
-    years = [1]
-    for i in range (round(payback_years)+5):
-        annual_returns.append(annual_cost_savings*i-cost_of_system)
-        years.append(i)
+    #annual_returns = [annual_cost_savings-cost_of_system]
+    #years = [1]
+    #for i in range (round(payback_years)+5):
+    #    annual_returns.append(annual_cost_savings*i-cost_of_system)
+    #    years.append(i)
 
     
-    axes[2].bar(years, annual_returns, color="#2596be")
+    ##axes[2].bar(years, annual_returns, color="#2596be")
     
     if rect1 is None or rect2 is None:
         rect1 = axes[0].bar(monthly_dni.keys(), monthly_dni.values())
