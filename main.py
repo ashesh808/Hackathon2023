@@ -6,10 +6,10 @@ import json
 base_url = "https://developer.nrel.gov/"
 lat = "40"
 lon = "-105"
-addr = "56387"
+zipcode = "56387"
 
 def get_request(zip):
-    response = requests.get(base_url + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&address=" + addr)
+    response = requests.get(base_url + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&address=" + zipcode)
     if response.status_code == 200:
         jsonData = response.json()
         #print(jsonData)
@@ -40,10 +40,10 @@ def redraw():
     global rect1
     global rect2
     global data
-    data = get_request(addr)
+    data = get_request(zipcode)
     annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
     annual_Energy = annual_avg_dni * 1 * 0.2
-    print("The average annual solar energy generated for zip code " + addr + " is " + str(annual_Energy) + " kWh")
+    print("The average annual solar energy generated for zip code " + zipcode + " is " + str(annual_Energy) + " kWh")
     monthly_dni = data["outputs"]["avg_dni"]["monthly"]
     monthly_ghi = data["outputs"]["avg_ghi"]["monthly"]
     
@@ -59,10 +59,10 @@ def redraw():
 
 
 def update(zip):
-    global addr
+    global zipcode
     global data
-    addr = zip
-    data = get_request(addr)
+    zipcode = zip
+    data = get_request(zipcode)
     redraw()
 
 update("56387")
@@ -71,7 +71,7 @@ update("56387")
 figure.subplots_adjust(bottom = 0.2)
 axbox = figure.add_axes([0.1, 0.05, 0.8, 0.075])
 text_box = TextBox(axbox, "Zip Code", textalignment="center")
-text_box.set_val(addr)
+text_box.set_val(zipcode)
 text_box.on_submit(update)
 redraw()
 plt.show()
