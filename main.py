@@ -11,7 +11,7 @@ lat = "45.465135"# St. Cloud MN
 lon = "-94.251555"#St. Cloud MN
 
 addr = "56301" #zip code for requesting solar data that way
-response = requests.get(base_url + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&address=" + addr)
+#response = requests.get(base_url + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&address=" + addr)
 
 #Requesting solar data via latitude and longitude
 #response = requests.get(base_url + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&lat=" + lat + "&lon=" + lon)
@@ -44,7 +44,6 @@ def redraw():
     global data
     global annual_Energy
     global annual_cost_savings
-    data = get_request(addr)
     data = solar_data.get_data_from_zip(addr)
     annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
     annual_Energy = annual_avg_dni * 0.5471 * 0.22 * 365 # the *0.75 could be omitted. I'm not sure.
@@ -94,23 +93,24 @@ def update(zip):
     global annual_cost_savings
     global ta
     global tb
+    global axbox
     ta.remove()
     tb.remove()
-    ax=figure.add_axes([0.1, 0.05, 0.8, 0.075])
     addr = zip
     data = solar_data.get_data_from_zip(addr)
     redraw()
-    ta=ax.text(0,-0.5, "Annual Solar Generation: "+ str(annual_Energy) + " kWh")
-    tb=ax.text(0.35,-0.5, "Annaul Cost Savings: $"+ str(annual_cost_savings))
+    ta=axbox.text(0,-0.5, "Annual Solar Generation: "+ str(annual_Energy) + " kWh")
+    tb=axbox.text(0.35,-0.5, "Annaul Cost Savings: $"+ str(annual_cost_savings))
 
-ax=figure.add_axes([0.1, 0.05, 0.8, 0.075])
-ta=ax.text(0,-0.5, "Annual Solar Generation: "+ str(annual_Energy) + " kWh")
-tb=ax.text(0.35,-0.5, "Annual Cost Savings: $"+ str(annual_cost_savings))
+
+axbox = figure.add_axes([0.1, 0.05, 0.8, 0.075])
+ta=axbox.text(0,-0.5, "Annual Solar Generation: "+ str(annual_Energy) + " kWh")
+tb=axbox.text(0.35,-0.5, "Annual Cost Savings: $"+ str(annual_cost_savings))
 
 update("56301")
 
 figure.subplots_adjust(bottom = 0.2)
-axbox = figure.add_axes([0.1, 0.05, 0.8, 0.075])
+
 text_box = TextBox(axbox, "Zip Code", textalignment="center")
 text_box.set_val(addr)
 text_box.on_submit(update)
