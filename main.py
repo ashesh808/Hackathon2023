@@ -6,10 +6,7 @@ import solar_data
 base_url = "https://developer.nrel.gov/"
 lat = "40"
 lon = "-105"
-addr = "56387"
-
-#Requesting solar data via latitude and longitude
-#response = requests.get(base_url + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&lat=" + lat + "&lon=" + lon)
+zipcode = "56387"
 
 
 # Energy = DNI x Area x Efficiency x Time
@@ -33,7 +30,22 @@ rect2 = None
 annual_Energy = 0
 annual_cost_savings=0
 
-def cost_saving():
+ax=figure.add_axes([0.1, 0.05, 0.8, 0.075])
+ta=ax.text(0,-0.5, "Annual Solar Generation: "+ str(annual_Energy) + " kWh")
+tb=ax.text(0.35,-0.5, "Annual Cost Savings: $"+ str(annual_cost_savings))
+
+def redraw():
+    global rect1
+    global rect2
+    global data
+    global annual_Energy
+    global annual_cost_savings
+    global ta
+    global tb
+    data = solar_data.get_data_from_zip(zipcode)
+    annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
+    annual_Energy = annual_avg_dni * 0.5471 * 0.22 * 365 # the *0.75 could be omitted. I'm not sure.
+    print("The average annual solar energy generated for zip code " + zipcode + " is " + str(annual_Energy) + " kWh")
     grid_electricity_cost = 0.1409 #Cents per Kwh
     cost_of_system = 124.99+439.99 #Cost of total installation
     annual_cost_savings = round(annual_Energy*grid_electricity_cost,2)
@@ -70,35 +82,33 @@ def redraw():
             rect.set_height(h)
         for rect, h in zip(rect2, monthly_ghi.values()):
             rect.set_height(h)
+    
+    ta.set_text("Annual Solar Generation: "+ str(annual_Energy) + " kWh")
+    tb.set_text("Annaul Cost Savings: $"+ str(annual_cost_savings))
     figure.canvas.draw_idle()
 
 
 def update(zip):
-    global addr
+    global zipcode
     global data
     global annual_Energy
     global annual_cost_savings
-    global ta
-    global tb
-    ta.remove()
-    tb.remove()
-    ax=figure.add_axes([0.1, 0.05, 0.8, 0.075])
-    addr = zip
-    data = solar_data.get_data_from_zip(addr)
+    zipcode = zip
+    data = solar_data.get_data_from_zip(zipcode)
     redraw()
-    ta=ax.text(0,-0.5, "Annual Solar Generation: "+ str(annual_Energy) + " kWh")
-    tb=ax.text(0.35,-0.5, "Annaul Cost Savings: $"+ str(annual_cost_savings))
 
-ax=figure.add_axes([0.1, 0.05, 0.8, 0.075])
-ta=ax.text(0,-0.5, "Annual Solar Generation: "+ str(annual_Energy) + " kWh")
-tb=ax.text(0.35,-0.5, "Annual Cost Savings: $"+ str(annual_cost_savings))
 
 update("56387")
 
 figure.subplots_adjust(bottom = 0.2)
-axbox = figure.add_axes([0.1, 0.05, 0.8, 0.075])
-text_box = TextBox(axbox, "Zip Code", textalignment="center")
-text_box.set_val(addr)
+#axbox = figure.add_axes([0.1, 0.05, 0.8, 0.075])
+text_box = TextBox(ax, "Zip Code", textalignment="center")
+text_box.set_val(zipcode)
 text_box.on_submit(update)
-redraw()
+
+#ax=figure.add_axes([0.1, 0.10, 0.8, 0.075])
+
+
+#axes[1][0].text(1,1, "What?")#adds text over the graph; not ideal.
+#redraw()
 plt.show()
