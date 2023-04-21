@@ -1,24 +1,10 @@
 import requests
 import matplotlib.pyplot as plt
 from matplotlib.widgets import TextBox
-import json
+import solar_data
 
-base_url = "https://developer.nrel.gov/"
 lat = "40"
 lon = "-105"
-zipcode = "56387"
-
-def get_request(zip):
-    response = requests.get(base_url + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&address=" + zipcode)
-    if response.status_code == 200:
-        jsonData = response.json()
-        #print(jsonData)
-        # Do something with the data
-    else:
-        print(f"Error: {response.status_code}")
-    data = json.loads(json.dumps(jsonData))
-    return data
-
 
 # Energy = DNI x Area x Efficiency x Time
 # Where:
@@ -31,23 +17,39 @@ def get_request(zip):
 monthly_dni = None
 monthly_ghi = None
 
-figure, axes = plt.subplots(1,2)
-
 rect1 = None
 rect2 = None
+
+# Creates a grid layout format for the buttons and graphs
+gs = plt.GridSpec(nrows=8, ncols=2, height_ratios=[8, 1, 1, 1, 1, 1, 1, 1], figure=None)
+figure = plt.figure()
+
+# Holds all the input variables that are used in calculations and graphing
+input_vars = {'zipcode': None, 'surfaceArea': None, 'powerRating': None, 'efficiency': None, 'cost': None, 'time': None}
+
+# TEMP: Set default value for zip code
+input_vars['zipcode'] = "56387"
+
+# Used with the buttons to update the input variables
+def update_input (text, variable):
+    input_vars[variable] = text
+    print(variable, ':', input_vars[variable])
+    data = solar_data.get_data_from_zip(input_vars['zipcode'])
+    redraw()
 
 def redraw():
     global rect1
     global rect2
     global data
-    data = get_request(zipcode)
+    data = solar_data.get_data_from_zip(input_vars['zipcode'])
     annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
     annual_Energy = annual_avg_dni * 1 * 0.2
-    print("The average annual solar energy generated for zip code " + zipcode + " is " + str(annual_Energy) + " kWh")
+    print("The average annual solar energy generated for zip code " + input_vars['zipcode'] + " is " + str(annual_Energy) + " kWh")
     monthly_dni = data["outputs"]["avg_dni"]["monthly"]
     monthly_ghi = data["outputs"]["avg_ghi"]["monthly"]
     
     if rect1 is None or rect2 is None:
+        axes = [figure.add_subplot(gs[0, 0]), figure.add_subplot(gs[0, 1])]
         rect1 = axes[0].bar(monthly_dni.keys(), monthly_dni.values())
         rect2 = axes[1].bar(monthly_ghi.keys(), monthly_ghi.values())
     else:
@@ -57,21 +59,42 @@ def redraw():
             rect.set_height(h)
     figure.canvas.draw_idle()
 
+update_input("56387", 'zipcode')
 
-def update(zip):
-    global zipcode
-    global data
-    zipcode = zip
-    data = get_request(zipcode)
-    redraw()
+# Captures the input values from the textboxes and updates the corrseponding values in the variables array
+# The on_submit method uses an anonymous function to choose which value to update
+# subplot(gs[x,y]) determines the location within the placement grid that the button will be placed in (size/width is defined by plt.GridSpec())
+plt.subplots_adjust(wspace=0.2, hspace=0.5)
 
-update("56387")
+# Zip code
+axbox = plt.subplot(gs[2, :])
+zipcode_box = TextBox(axbox, "Zip Code", textalignment="center", initial=input_vars['zipcode'])
+zipcode_box.on_submit(lambda text: update_input(text, 'zipcode'))
 
+# Surface area
+axbox = plt.subplot(gs[3, :])
+area_box = TextBox(axbox, "Surface Area", textalignment="center")
+area_box.on_submit(lambda text: update_input(text, 'surfaceArea'))
 
-figure.subplots_adjust(bottom = 0.2)
-axbox = figure.add_axes([0.1, 0.05, 0.8, 0.075])
-text_box = TextBox(axbox, "Zip Code", textalignment="center")
-text_box.set_val(zipcode)
-text_box.on_submit(update)
-redraw()
+# Power rating
+axbox = plt.subplot(gs[4, :])
+power_box = TextBox(axbox, "Power Rating", textalignment="center")
+power_box.on_submit(lambda text: update_input(text, 'powerRating'))
+
+# Efficency
+axbox = plt.subplot(gs[5, :])
+efficency_box = TextBox(axbox, "Efficency", textalignment="center")
+efficency_box.on_submit(lambda text: update_input(text, 'efficency'))
+
+# Cost
+axbox = plt.subplot(gs[6, :])
+cost_box = TextBox(axbox, "Cost", textalignment="center")
+cost_box.on_submit(lambda text: update_input(text, 'cost'))
+
+# Time
+axbox = plt.subplot(gs[7, :])
+time_box = TextBox(axbox, "Time", textalignment="center")
+time_box.on_submit(lambda text: update_input(text, 'time'))
+
+#redraw()
 plt.show()
