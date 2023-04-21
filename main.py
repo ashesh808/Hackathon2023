@@ -2,9 +2,12 @@ import requests
 import json
 
 base_url = "https://developer.nrel.gov/"
-lat = "40"
-lon = "-105"
-response = requests.get(base_url + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&lat=" + lat + "&lon=" + lon)
+# lat = input("Enter latitude ")
+# lon = input("Enter longitude ")
+# response = requests.get(base_url + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&lat=" + lat + "&lon=" + lon)
+
+address = input("Enter a zipcode ")
+response = requests.get(base_url + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&address=" + address)
 
 
 def get_request():
@@ -28,6 +31,8 @@ annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
 # Efficiency is the efficiency of the solar panel (usually given as a percentage)
 # Time is the time duration for which the solar panel is exposed to the sun in hours
 
-annual_Energy = annual_avg_dni * 1 * 0.2 * 6
+annual_Energy = annual_avg_dni
 
-print("The average annual solar energy generated for latitude: " + lat + " and longitude: " + lon + " is " + str(annual_Energy) + " kWh")
+print("The average annual solar energy generated for latitude: " + address + " is " + str(annual_Energy) + " kWh")
+
+# print(annual_avg_dni)
