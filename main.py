@@ -5,7 +5,8 @@ import math
 
 lat = "40"
 lon = "-105"
-addr = "56387"
+zipcode = "56387"
+
 
 # Energy = DNI x Area x Efficiency x Time
 # Where:
@@ -40,10 +41,10 @@ def redraw():
     global annual_cost_savings
     global ta
     global tb
-    data = solar_data.get_data_from_zip(addr)
+    data = solar_data.get_data_from_zip(zipcode)
     annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
     annual_Energy = annual_avg_dni * 0.5471 * 0.22 * 365 # the *0.75 could be omitted. I'm not sure.
-    print("The average annual solar energy generated for zip code " + addr + " is " + str(annual_Energy) + " kWh")
+    print("The average annual solar energy generated for zip code " + zipcode + " is " + str(annual_Energy) + " kWh")
     grid_electricity_cost = 0.1409 #Cents per Kwh
     cost_of_system = 124.99+439.99 #Cost of total installation
     annual_cost_savings = round(annual_Energy*grid_electricity_cost,2)
@@ -86,12 +87,12 @@ def redraw():
 
 
 def update(zip):
-    global addr
+    global zipcode
     global data
     global annual_Energy
     global annual_cost_savings
-    addr = zip
-    data = solar_data.get_data_from_zip(addr)
+    zipcode = zip
+    data = solar_data.get_data_from_zip(zipcode)
     redraw()
 
 
@@ -100,7 +101,7 @@ update("56301")
 figure.subplots_adjust(bottom = 0.2)
 #axbox = figure.add_axes([0.1, 0.05, 0.8, 0.075])
 text_box = TextBox(ax, "Zip Code", textalignment="center")
-text_box.set_val(addr)
+text_box.set_val(zipcode)
 text_box.on_submit(update)
 
 #ax=figure.add_axes([0.1, 0.10, 0.8, 0.075])
