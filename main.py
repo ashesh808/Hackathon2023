@@ -1,33 +1,11 @@
-import requests
 import matplotlib.pyplot as plt
 from matplotlib.widgets import TextBox
-import json
+import solar_data
 import math
 
-base_url = "https://developer.nrel.gov/"
 lat = "40"
 lon = "-105"
-lat = "45.465135"# St. Cloud MN
-lon = "-94.251555"#St. Cloud MN
-
-addr = "56301" #zip code for requesting solar data that way
-response = requests.get(base_url + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&address=" + addr)
-
-#Requesting solar data via latitude and longitude
-#response = requests.get(base_url + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&lat=" + lat + "&lon=" + lon)
-
-
-def get_request(zip):
-    response = requests.get(base_url + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&address=" + addr)
-    if response.status_code == 200:
-        jsonData = response.json()
-        #print(jsonData)
-        # Do something with the data
-    else:
-        print(f"Error: {response.status_code}")
-    data = json.loads(json.dumps(jsonData))
-    return data
-
+addr = "56387"
 
 # Energy = DNI x Area x Efficiency x Time
 # Where:
@@ -56,7 +34,7 @@ def redraw():
     global data
     global annual_Energy
     global annual_cost_savings
-    data = get_request(addr)
+    data = solar_data.get_data_from_zip(addr)
     annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
     annual_Energy = annual_avg_dni * 0.5471 * 0.22 * 365 # the *0.75 could be omitted. I'm not sure.
     print("The average annual solar energy generated for zip code " + addr + " is " + str(annual_Energy) + " kWh")
@@ -109,7 +87,7 @@ def update(zip):
     tb.remove()
     ax=figure.add_axes([0.1, 0.05, 0.8, 0.075])
     addr = zip
-    data = get_request(addr)
+    data = solar_data.get_data_from_zip(addr)
     redraw()
     ta=ax.text(0,-0.5, "Annual Solar Generation: "+ str(annual_Energy) + " kWh")
     tb=ax.text(0.35,-0.5, "Annaul Cost Savings: $"+ str(annual_cost_savings))
