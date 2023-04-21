@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import TextBox
 import solar_data
-import math
 
 lat = "40"
 lon = "-105"
