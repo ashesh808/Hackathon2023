@@ -25,6 +25,7 @@ annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
 
 # Energy = DNI x Area x Efficiency x Time
 # Where:
+#test
 # DNI is the Direct Normal Irradiance in W/m^2
 # Area is the surface area of the solar panel in m^2
 # Efficiency is the efficiency of the solar panel (usually given as a percentage)
