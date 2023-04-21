@@ -1,4 +1,4 @@
-import requests
+
 import matplotlib.pyplot as plt
 from matplotlib.widgets import TextBox
 import solar_data
@@ -60,5 +60,5 @@ axbox = figure.add_axes([0.1, 0.05, 0.8, 0.075])
 text_box = TextBox(axbox, "Zip Code", textalignment="center")
 text_box.set_val(addr)
 text_box.on_submit(update)
-#redraw()
+redraw()
 plt.show()
