@@ -47,11 +47,15 @@ figure, axes = plt.subplots(1,3)
 
 rect1 = None
 rect2 = None
+annual_Energy = 0
+annual_cost_savings=0
 
 def redraw():
     global rect1
     global rect2
     global data
+    global annual_Energy
+    global annual_cost_savings
     data = get_request(addr)
     annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
     annual_Energy = annual_avg_dni * 0.5471 * 0.22 * 365 # the *0.75 could be omitted. I'm not sure.
@@ -97,18 +101,34 @@ def redraw():
 def update(zip):
     global addr
     global data
+    global annual_Energy
+    global annual_cost_savings
+    global ta
+    global tb
+    ta.remove()
+    tb.remove()
+    ax=figure.add_axes([0.1, 0.05, 0.8, 0.075])
     addr = zip
     data = get_request(addr)
     redraw()
+    ta=ax.text(0,-0.5, "Annual Solar Generation: "+ str(annual_Energy) + " kWh")
+    tb=ax.text(0.35,-0.5, "Annaul Cost Savings: $"+ str(annual_cost_savings))
+
+ax=figure.add_axes([0.1, 0.05, 0.8, 0.075])
+ta=ax.text(0,-0.5, "Annual Solar Generation: "+ str(annual_Energy) + " kWh")
+tb=ax.text(0.35,-0.5, "Annual Cost Savings: $"+ str(annual_cost_savings))
 
 update("56301")
-
 
 figure.subplots_adjust(bottom = 0.2)
 axbox = figure.add_axes([0.1, 0.05, 0.8, 0.075])
 text_box = TextBox(axbox, "Zip Code", textalignment="center")
 text_box.set_val(addr)
 text_box.on_submit(update)
+
+#ax=figure.add_axes([0.1, 0.10, 0.8, 0.075])
+
+
 #axes[1][0].text(1,1, "What?")#adds text over the graph; not ideal.
 redraw()
 plt.show()
