@@ -6,7 +6,7 @@ import solar_data
 base_url = "https://developer.nrel.gov/"
 lat = "40"
 lon = "-105"
-zipcode = "56387"
+addr = "56387"
 
 
 # Energy = DNI x Area x Efficiency x Time
@@ -73,7 +73,7 @@ def redraw():
     print("The average annual solar energy generated for zip code " + addr + " is " + str(annual_Energy) + " kWh")
     monthly_dni = data["outputs"]["avg_dni"]["monthly"]
     monthly_ghi = data["outputs"]["avg_ghi"]["monthly"]
-    cost_saving()
+    # cost_saving()
     if rect1 is None or rect2 is None:
         rect1 = axes[0].bar(monthly_dni.keys(), monthly_dni.values())
         rect2 = axes[1].bar(monthly_ghi.keys(), monthly_ghi.values())
