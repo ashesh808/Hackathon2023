@@ -1,10 +1,12 @@
 import requests
+import matplotlib.pyplot as plt
 import json
 
 base_url = "https://developer.nrel.gov/"
 lat = "40"
 lon = "-105"
-response = requests.get(base_url + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&lat=" + lat + "&lon=" + lon)
+addr = "56387"
+response = requests.get(base_url + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&address=" + addr)
 
 
 def get_request():
@@ -30,4 +32,9 @@ annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
 
 annual_Energy = annual_avg_dni * 1 * 0.2 * 6
 
-print("The average annual solar energy generated for latitude: " + lat + " and longitude: " + lon + " is " + str(annual_Energy) + " kWh")
+print("The average annual solar energy generated for zip code " + addr + " is " + str(annual_Energy) + " kWh")
+
+monthly_dni = data["outputs"]["avg_dni"]
+plt.figure()
+plt.plot(monthly_dni.keys(), monthly_dni.values())
+plt.show()
