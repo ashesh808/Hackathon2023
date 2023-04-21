@@ -1,22 +1,11 @@
 import requests
 import matplotlib.pyplot as plt
 from matplotlib.widgets import TextBox
-import json
+import solar_data
 
-base_url = "https://developer.nrel.gov/"
 lat = "40"
 lon = "-105"
 addr = "56387"
-
-
-def get_request(zip):
-    response = requests.get(base_url + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&address=" + addr)
-    if response.status_code == 200:
-        jsonData = response.json()
-    else:
-        print(f"Error: {response.status_code}")
-    data = json.loads(json.dumps(jsonData))
-    return data
 
 # Energy = DNI x Area x Efficiency x Time
 # Where:
@@ -38,8 +27,7 @@ def redraw():
     global rect1
     global rect2
     global data
-    data = get_request(addr)
-    # data = static_request()
+    data = solar_data.get_data_from_zip(addr)
     annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
     annual_Energy = annual_avg_dni * 1 * 0.2
     print("The average annual solar energy generated for zip code " + addr + " is " + str(annual_Energy) + " kWh")
@@ -61,7 +49,7 @@ def update(zip):
     global addr
     global data
     addr = zip
-    data = get_request(addr)
+    data = solar_data.get_data_from_zip(addr)
     redraw()
 
 update("56387")
@@ -72,5 +60,5 @@ axbox = figure.add_axes([0.1, 0.05, 0.8, 0.075])
 text_box = TextBox(axbox, "Zip Code", textalignment="center")
 text_box.set_val(addr)
 text_box.on_submit(update)
-redraw()
+#redraw()
 plt.show()
