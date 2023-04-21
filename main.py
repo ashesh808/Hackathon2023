@@ -15,9 +15,6 @@ zipcode = "56387"
 # Efficiency is the efficiency of the solar panel (usually given as a percentage) (E.g. 19% = 0.19)
 # Time is the time duration for which the solar panel is exposed to the sun in hours
 
-
-
-
 monthly_dni = None
 monthly_ghi = None
 
