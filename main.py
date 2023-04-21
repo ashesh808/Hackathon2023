@@ -43,7 +43,7 @@ def get_request(zip):
 monthly_dni = None
 monthly_ghi = None
 
-figure, axes = plt.subplots(2,2)
+figure, axes = plt.subplots(1,3)
 
 rect1 = None
 rect2 = None
@@ -81,11 +81,11 @@ def redraw():
         years.append(i)
 
     
-    axes[1][0].bar(years, annual_returns, color="#2596be")
+    axes[2].bar(years, annual_returns, color="#2596be")
     
     if rect1 is None or rect2 is None:
-        rect1 = axes[0][0].bar(monthly_dni.keys(), monthly_dni.values())
-        rect2 = axes[0][1].bar(monthly_ghi.keys(), monthly_ghi.values())
+        rect1 = axes[0].bar(monthly_dni.keys(), monthly_dni.values())
+        rect2 = axes[1].bar(monthly_ghi.keys(), monthly_ghi.values())
     else:
         for rect, h in zip(rect1, monthly_dni.values()):
             rect.set_height(h)
@@ -109,5 +109,6 @@ axbox = figure.add_axes([0.1, 0.05, 0.8, 0.075])
 text_box = TextBox(axbox, "Zip Code", textalignment="center")
 text_box.set_val(addr)
 text_box.on_submit(update)
+#axes[1][0].text(1,1, "What?")#adds text over the graph; not ideal.
 redraw()
 plt.show()
