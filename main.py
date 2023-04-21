@@ -2,7 +2,6 @@ import requests
 import matplotlib.pyplot as plt
 from matplotlib.widgets import TextBox
 import json
-import math
 import solar_data
 
 lat = "40"
