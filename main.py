@@ -1,4 +1,5 @@
 import requests
+import matplotlib.pyplot as plt
 import json
 import math
 
@@ -33,7 +34,7 @@ annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
 # Where:
 # DNI is the Direct Normal Irradiance in Kwh/M^2/day
 # Area is the surface area of the solar panel in m^2
-# Efficiency is the efficiency of the solar panel (usually given as a percentage)
+# Efficiency is the efficiency of the solar panel (usually given as a percentage) (E.g. 19% = 0.19)
 # Time is the time duration for which the solar panel is exposed to the sun in hours
 
 annual_Energy = annual_avg_dni * 0.5471 * 0.22 * 365 # the *0.75 could be omitted. I'm not sure.
@@ -51,3 +52,19 @@ print("The cost savings from this system could be as much as $" + str(annual_cos
 
 print("The payback period could be as little as " + str(payback_years) + " years.")
 
+monthly_dni = data["outputs"]["avg_dni"]["monthly"]
+monthly_ghi = data["outputs"]["avg_ghi"]["monthly"]
+
+#Bar graphs are formatted as {'key': value}
+#print(monthly_dni)
+annual_returns = [annual_cost_savings-cost_of_system]
+years = [1]
+for i in range (round(payback_years)+5):
+    annual_returns.append(annual_cost_savings*i-cost_of_system)
+    years.append(i)
+
+figures, axes = plt.subplots(2,2)
+axes[0][0].bar(monthly_dni.keys(), monthly_dni.values())
+axes[0][1].bar(monthly_ghi.keys(), monthly_ghi.values())
+axes[1][0].bar(years, annual_returns)
+plt.show()
