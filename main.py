@@ -1,11 +1,8 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import TextBox
-<<<<<<<<< Temporary merge branch 1
 import solar_data
-=========
 import json
 import math
->>>>>>>>> Temporary merge branch 2
 
 lat = "40"
 lon = "-105"
@@ -45,7 +42,7 @@ def redraw():
     global rect1
     global rect2
     global data
-<<<<<<<<< Temporary merge branch 1
+
     data = solar_data.get_data_from_zip(addr)
     global annual_Energy
     global annual_cost_savings
@@ -121,6 +118,8 @@ axbox = figure.add_axes([0.1, 0.05, 0.8, 0.075])
 text_box = TextBox(axbox, "Zip Code", textalignment="center")
 text_box.set_val(addr)
 text_box.on_submit(update)
+
+
 
 #ax=figure.add_axes([0.1, 0.10, 0.8, 0.075])
 
