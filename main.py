@@ -5,11 +5,7 @@ import solar_data
 import compare
 
 # Creates a grid layout format for the buttons and graphs
-<<<<<<< HEAD
-gs = plt.GridSpec(nrows=12, ncols=2, height_ratios=[8, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0], figure=None)
-=======
 gs = plt.GridSpec(nrows=12, ncols=2, height_ratios=[8, 1, 8, 2, 2, 2, 2, 2, 2, 2, 2, 2], figure=None)
->>>>>>> origin/main
 figure = plt.figure()
 
 text_subplot1 = figure.add_subplot(gs[10, :])
@@ -40,38 +36,27 @@ rect1 = None
 rect2 = None
 annual_Energy = 0
 annual_cost_savings=0
-<<<<<<< HEAD
 payback_years=0
-=======
->>>>>>> origin/main
+axes = [figure.add_subplot(gs[2, :])]
+net_profit_graph=axes[0].bar([1], [1], color="#2596be")
 
 def cost_saving():
     global payback_years
+    global axes
+    global net_profit_graph
     grid_electricity_cost = 0.1409 #Cents per Kwh
     cost_of_system = 124.99+439.99 #Cost of total installation
     annual_cost_savings = round(annual_Energy*grid_electricity_cost,2)
     payback_years = round(cost_of_system/annual_cost_savings,2)
-<<<<<<< HEAD
-    print("The cost savings from this system could be as much as $" + str(annual_cost_savings) + " Per Year" )
-    print("The payback period could be as little as " + str(payback_years) + " years.")
-    # annual_returns = [annual_cost_savings-cost_of_system]
-    # years = [1]
-    # axes = [figure.add_subplot(gs[2, :])]
-    # for i in range (round(payback_years)+5):
-    #     annual_returns.append(annual_cost_savings*i-cost_of_system)
-    #     years.append(i)
-    # axes[0].bar(years, annual_returns, color="#2596be")
-=======
     print("This system could save as much as $" + str("{:.2f}".format(round(annual_cost_savings,2))) + " per Year" )
     print("The payback period could be as little as " + str(round(payback_years,2)) + " years.")
     annual_returns = [annual_cost_savings-cost_of_system]
     years = [1]
-    axes = [figure.add_subplot(gs[2, :])]
+    net_profit_graph.remove()
     for i in range (round(payback_years)+5):
         annual_returns.append(annual_cost_savings*i-cost_of_system)
         years.append(i)
-    axes[0].bar(years, annual_returns, color="#2596be")
->>>>>>> origin/main
+    net_profit_graph=axes[0].bar(years, annual_returns, color="#2596be")
 
 # Used with the buttons to update the input variables
 def update_input (text, variable):
@@ -124,16 +109,9 @@ def redraw():
         for rect, h in zip(rect2, monthly_ghi.values()):
             rect.set_height(h)
     
-<<<<<<< HEAD
-    draw_output_text(annual_Energy, annual_cost_savings, payback_years)
-    
-    #text_subplot1.text(0.5, 0.5, "Annual Solar Generation: "+ str(annual_Energy) + " kWh", ha='center', va='center', fontsize=8)
-    #text_subplot2.text(0.5, 0.5, "Annual Cost Savings: $"+ str(annual_cost_savings), ha='center', va='center', fontsize=8)
-=======
     
     text_subplot1.text(0.5, 0.5, "Annual Solar Generation: "+ str(round(annual_Energy)) + " kWh", ha='center', va='center', fontsize=8)
     text_subplot2.text(0.5, 0.5, "Annual Cost Savings: $"+ str(round(annual_cost_savings,2)), ha='center', va='center', fontsize=8)
->>>>>>> origin/main
     figure.canvas.draw_idle()
 
 axbox=plt.subplot(gs[9, :])
