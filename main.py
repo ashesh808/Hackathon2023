@@ -34,10 +34,16 @@ monthly_ghi = None
 
 rect1 = None
 rect2 = None
+rect3 = None
+text_label1 = None
+text_label2 = None
 annual_Energy = 0
 annual_cost_savings=0
 
 def cost_saving():
+    global rect3
+    global text_label1
+    global text_label2
     grid_electricity_cost = 0.1409 #Cents per Kwh
     cost_of_system = 124.99+439.99 #Cost of total installation
     annual_cost_savings = round(annual_Energy*grid_electricity_cost,2)
@@ -50,7 +56,18 @@ def cost_saving():
     for i in range (round(payback_years)+5):
         annual_returns.append(annual_cost_savings*i-cost_of_system)
         years.append(i)
-    axes[0].bar(years, annual_returns, color="#2596be")
+    
+    if text_label1 is None:
+        rect3 = axes[0].bar(years, annual_returns, color="#2596be")
+        text_label1 = text_subplot1.text(0.5, 0.5, "0", ha='center', va='center', fontsize=8)
+        text_label2 = text_subplot2.text(0.5, 0.5, "0", ha='center', va='center', fontsize=8)
+    
+    text_label1.set_text("Annual Solar Generation: "+ str(annual_Energy) + " kWh")
+    text_label2.set_text("Annual Cost Savings: $"+ str(annual_cost_savings))
+    print(rect3)
+    for rect, h in zip(rect3, annual_returns):
+        rect.set_height(h)
+        #rect.set_width(w)
 
 # Used with the buttons to update the input variables
 def update_input (text, variable):
@@ -90,8 +107,7 @@ def redraw():
             rect.set_height(h)
     
     
-    text_subplot1.text(0.5, 0.5, "Annual Solar Generation: "+ str(round(annual_Energy)) + " kWh", ha='center', va='center', fontsize=8)
-    text_subplot2.text(0.5, 0.5, "Annual Cost Savings: $"+ str(round(annual_cost_savings,2)), ha='center', va='center', fontsize=8)
+    
     figure.canvas.draw_idle()
 
 update_input("56387", 'zipcode')

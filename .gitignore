@@ -1,6 +1,12 @@
 env/
 **/__pycache__/
 __pycache__/
+DataSet.py
+figure_plots.py
+Graph.py
+TextBox.py
+TextLabel.py
+main2.py
 
 # Compiled source #
 ###################
