@@ -5,7 +5,6 @@ import solar_data
 import compare
 
 # Creates a grid layout format for the buttons and graphs
-
 gs = plt.GridSpec(nrows=12, ncols=2, height_ratios=[10, 2, 10, 2, 2, 2, 2, 2, 2, 2, 0 , 0], figure=None)
 figure = plt.figure("Solar Calculator")
 
@@ -14,7 +13,6 @@ input_vars = {'zipcode': None, 'surfaceArea': None, 'electricityCost': None, 'ef
 
 # TEMP: Set default value for zip code
 input_vars['zipcode'] = "56301"
-
 input_vars['surfaceArea'] = 20 #Square Meters
 input_vars['electricityCost'] = 0.1409 #Cost of power, USD per kWh (0.1409=Minnesota Average)
 input_vars['efficiency'] = 18 #Percent
@@ -23,12 +21,6 @@ input_vars['time'] = 365 #The length of a year, in days. Probably shouldn't be a
 input_vars['lat'] = "-1"
 input_vars['long'] = "-1"
 
-# Energy = DNI x Area x Efficiency x Time
-# Where:
-# test
-# DNI is the Direct Normal Irradiance in W/m^2
-# Area is the surface area of the solar panel in m^2
-# Efficiency is the efficiency of the solar panel (usually given as a percentage)
 
 monthly_dni = None
 monthly_ghi = None
@@ -45,6 +37,7 @@ payback_years=0
 axes = [figure.add_subplot(gs[2, :])]
 net_profit_graph=axes[0].bar([1], [1], color="#2596be")
 
+#Function to calculate cost savings and determine payback period
 def cost_saving():
     global payback_years
     global axes
@@ -81,8 +74,6 @@ def update_input (text, variable):
     if text == "":
         return
     elif input_vars[variable] == text:
-        #this var was already set to this
-        #redraw()
         return
     if variable=='electricityCost':
         input_vars[variable] = str(float(text)/100)
@@ -90,7 +81,6 @@ def update_input (text, variable):
         input_vars[variable] = text
     
     print(variable, ':', input_vars[variable])
-    #data = solar_data.get_data_from_zip(input_vars['zipcode'])
     isNewLocation = False
     if variable == "zipcode":
         lat_box.set_val("")
@@ -109,16 +99,15 @@ def update_input (text, variable):
             utility_data = solar_data.get_utility_from_zip(input_vars['zipcode'])
         elif input_vars["lat"] != "" and input_vars["long"] != "":
             utility_data = solar_data.get_utility_from_lat_long(input_vars["lat"], input_vars["long"])
-        #utility_data = solar_data.get_utility_from_zip(text)
         if utility_data is not None:
             c = str(float(utility_data["outputs"]["residential"])*100)
             power_box.set_val(c)
     redraw()
     
-
+#Function to show statistical data from calculations
 def draw_output_text(annual_Energy,annual_cost_savings,payback_years):
-    global ta#These objects are the output text.
-    global tb#These will not work unless they are global
+    global ta #These objects are the output text.
+    global tb #These will not work unless they are global
     global tc
     global axbox
     ta.remove()
@@ -132,6 +121,7 @@ axes2 = [figure.add_subplot(gs[0, 0]), figure.add_subplot(gs[0, 1])]
 rect1=axes2[0].bar([1], [1], color="#2596be")
 rect2=axes2[1].bar([1], [1], color="#2596be")
 
+#Function to update the graphs after a new zipcode submission
 def redraw():
     global input_vars
     global rect1
@@ -155,7 +145,6 @@ def redraw():
     annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
     annual_Energy = float(annual_avg_dni) * float(input_vars['surfaceArea']) * float(input_vars['efficiency'])/100 * float(input_vars['time']) # the *0.75 could be omitted. I'm not sure.
     print("The average annual solar energy generated for zip code " + input_vars['zipcode'] + " is " + str(round(annual_Energy)) + " kWh")
-    # print("The average annual solar energy generated for latitude: " + lat + " and longitude: " + lon + " is " + str(round(annual_Energy)) + " kWh")
     cost_saving()
     monthly_dni = data["outputs"]["avg_dni"]["monthly"]
     monthly_ghi = data["outputs"]["avg_ghi"]["monthly"]
@@ -192,10 +181,12 @@ axbox = plt.subplot(gs[4, :])
 zipcode_box = TextBox(axbox, "Zip Code", textalignment="center", initial=input_vars['zipcode'])
 zipcode_box.on_submit(lambda text: update_input(text, 'zipcode'))
 
+# Latitude
 axbox = plt.subplot(gs[5, 0])
 lat_box = TextBox(axbox, "Latitude", textalignment="center", initial=input_vars['lat'])
 lat_box.on_submit(lambda text: update_input(text, 'lat'))
 
+# Longitude
 axbox = plt.subplot(gs[5, 1])
 long_box = TextBox(axbox, "Longitude", textalignment="center", initial=input_vars['long'])
 long_box.on_submit(lambda text: update_input(text, 'long'))
@@ -227,14 +218,11 @@ update_input("56387", 'zipcode')
 def on_button_click(event):
     fig = compare.create_new_window()
 
-
 # Create a red button and specify its position and label
-button_ax = plt.axes([0.03, 0.89, 0.15, 0.08])  # [left, bottom, width, height]
+button_ax = plt.axes([0.03, 0.89, 0.15, 0.08])  #[left, bottom, width, height]
 button = Button(button_ax, 'Compare', color='c')
 
 # Connect the button to the function
 button.on_clicked(on_button_click)
 
-#compare.create_new_window()
-#redraw()
 plt.show()
