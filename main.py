@@ -14,13 +14,13 @@ figure = plt.figure()
 #text_subplot2.axis('off')
 
 # Holds all the input variables that are used in calculations and graphing
-input_vars = {'zipcode': None, 'surfaceArea': None, 'powerRating': None, 'efficiency': None, 'cost': None, 'time': None}
+input_vars = {'zipcode': None, 'surfaceArea': None, 'electricityCost': None, 'efficiency': None, 'cost': None, 'time': None}
 
 # TEMP: Set default value for zip code
 input_vars['zipcode'] = "56387"
 
 input_vars['surfaceArea'] = 0.5
-input_vars['powerRating'] = 100
+input_vars['electricityCost'] = 0.1409 #Cost of power in Minnesota, USD per kWh
 input_vars['efficiency'] = 18
 input_vars['cost'] = 20000
 input_vars['time'] = 365
@@ -53,20 +53,26 @@ def cost_saving():
     global annual_cost_savings
     global annual_Energy
     global net_profit_graph
-    grid_electricity_cost = 0.1409 #Cents per Kwh
-    cost_of_system = 124.99+439.99 #Cost of total installation
-    annual_cost_savings = round(annual_Energy*grid_electricity_cost,2)
-    payback_years = round(cost_of_system/annual_cost_savings,2)
+    global input_vars
+    annual_cost_savings = round(annual_Energy*float(input_vars['electricityCost']),2)
+    payback_years = round(float(input_vars['cost'])/annual_cost_savings,2)
     print("This system could save as much as $" + str("{:.2f}".format(round(annual_cost_savings,2))) + " per Year" )
     print("The payback period could be as little as " + str(round(payback_years,2)) + " years.")
-    annual_returns = [annual_cost_savings-cost_of_system]
+    annual_returns = [annual_cost_savings-float(input_vars['cost'])]
     years = [1]
+    #years.clear()
+    #years = [1]
+    #axes[0].autoscale()#doesn't seem to work for some reason.
     net_profit_graph.remove()
     for i in range (round(payback_years)+5):
-        annual_returns.append(annual_cost_savings*i-cost_of_system)
+        annual_returns.append(annual_cost_savings*i-float(input_vars['cost']))
         years.append(i)
+        years[i]=i
     net_profit_graph=axes[0].bar(years, annual_returns, color="#2596be")
+    print(annual_returns)
     axes[0].set_title('Net Profit USD')
+    axes[0].set_xlim([(payback_years*-0.01)+0.5,years[-1]+0.5+payback_years*0.01])   
+    axes[0].set_ylim([annual_returns[0]+(annual_returns[0]*0.2),annual_returns[-1]+(annual_returns[-1]*0.2)]) 
 
 # Used with the buttons to update the input variables
 def update_input (text, variable):
@@ -103,7 +109,7 @@ def redraw():
         return
     
     print(input_vars['surfaceArea'])
-    print(input_vars['powerRating'])
+    print(input_vars['electricityCost'])
     print(input_vars['efficiency'])
     print(input_vars['cost'])
     print(input_vars['time'])
@@ -163,8 +169,8 @@ area_box.on_submit(lambda text: update_input(text, 'surfaceArea'))
 
 # Power rating
 axbox = plt.subplot(gs[6, :])
-power_box = TextBox(axbox, "Power Rating", textalignment="center")
-power_box.on_submit(lambda text: update_input(text, 'powerRating'))
+power_box = TextBox(axbox, "Electricity Cost", textalignment="center")
+power_box.on_submit(lambda text: update_input(text, 'electricityCost'))
 
 # Efficency
 axbox = plt.subplot(gs[7, :])
