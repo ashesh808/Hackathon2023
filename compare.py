@@ -9,11 +9,15 @@ def submit_text(text):
 def create_new_window():
     #plt.ion()
     fig = plt.figure("Test")
+
+    
     # First plot
-    ax1 = fig.add_subplot(2, 1, 1)  # 2 rows, 1 column, first plot
+    ax1 = fig.add_subplot(2, 2, 1)  # 2 rows, 1 column, first plot
     x1 = [1, 2, 3, 4, 5]
     y1 = [25, 16, 9, 4, 1]
     ax1.bar(x1, y1)
+
+
     # Create two text boxes
     axs2 = fig.add_axes([0.1, 0.89, 0.25, 0.06])
     axs3 = fig.add_axes([0.6, 0.89, 0.25, 0.06])
@@ -25,11 +29,22 @@ def create_new_window():
     
     
     # Second plot
-    ax2 = fig.add_subplot(2, 1, 2)  # 2 rows, 1 column, second plot
+    ax2 = fig.add_subplot(2, 2, 2)  # 2 rows, 1 column, second plot
     x2 = [0, 1, 2, 3, 4, 5]
     y2 = [0, 1, 4, 9, 16, 25]
     ax2.plot(x2, y2)
     print("Shown!")
+
+    ax3 = fig.add_subplot(2, 2, 3)  # 2 rows, 1 column, first plot
+    x3 = [1, 2, 3, 4, 5]
+    y3 = [25, 16, 9, 4, 1]
+    ax3.bar(x3, y3)
+
+    ax3 = fig.add_subplot(2, 2, 4)  # 2 rows, 1 column, first plot
+    x3 = [1, 2, 3, 4, 5]
+    y3 = [25, 16, 9, 4, 1]
+    ax3.bar(x3, y3)
+    
     plt.show(block=True)
 
     # this is good enough as is, it works well enough now
