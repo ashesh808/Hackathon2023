@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import TextBox
+from matplotlib.widgets import Button
 import solar_data
 
 lat = "40"
@@ -34,6 +35,8 @@ def cost_saving():
         annual_returns.append(annual_cost_savings*i-cost_of_system)
         years.append(i)
     axes[2].bar(years, annual_returns, color="#2596be")
+    tb.set_text("Annaul Cost Savings: $"+ str(annual_cost_savings))
+
 
 def redraw():
     global rect1
@@ -59,10 +62,8 @@ def redraw():
         for rect, h in zip(rect1, monthly_dni.values()):
             rect.set_height(h)
         for rect, h in zip(rect2, monthly_ghi.values()):
-            rect.set_height(h)
-    
+            rect.set_height(h) 
     ta.set_text("Annual Solar Generation: "+ str(annual_Energy) + " kWh")
-    tb.set_text("Annaul Cost Savings: $"+ str(annual_cost_savings))
     figure.canvas.draw_idle()
 
 
@@ -75,18 +76,12 @@ def update(zip):
     data = solar_data.get_data_from_zip(zipcode)
     redraw()
 
-
 update("56301")
 
 figure.subplots_adjust(bottom = 0.2)
-#axbox = figure.add_axes([0.1, 0.05, 0.8, 0.075])
 text_box = TextBox(ax, "Zip Code", textalignment="center")
 text_box.set_val(zipcode)
 text_box.on_submit(update)
 
-#ax=figure.add_axes([0.1, 0.10, 0.8, 0.075])
 
-
-#axes[1][0].text(1,1, "What?")#adds text over the graph; not ideal.
-#redraw()
 plt.show()
