@@ -1,9 +1,15 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import TextBox
+from matplotlib.widgets import Button
 import solar_data
+import compare
 
 # Creates a grid layout format for the buttons and graphs
+<<<<<<< HEAD
 gs = plt.GridSpec(nrows=12, ncols=2, height_ratios=[8, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0], figure=None)
+=======
+gs = plt.GridSpec(nrows=12, ncols=2, height_ratios=[8, 1, 8, 2, 2, 2, 2, 2, 2, 2, 2, 2], figure=None)
+>>>>>>> origin/main
 figure = plt.figure()
 
 text_subplot1 = figure.add_subplot(gs[10, :])
@@ -34,7 +40,10 @@ rect1 = None
 rect2 = None
 annual_Energy = 0
 annual_cost_savings=0
+<<<<<<< HEAD
 payback_years=0
+=======
+>>>>>>> origin/main
 
 def cost_saving():
     global payback_years
@@ -42,6 +51,7 @@ def cost_saving():
     cost_of_system = 124.99+439.99 #Cost of total installation
     annual_cost_savings = round(annual_Energy*grid_electricity_cost,2)
     payback_years = round(cost_of_system/annual_cost_savings,2)
+<<<<<<< HEAD
     print("The cost savings from this system could be as much as $" + str(annual_cost_savings) + " Per Year" )
     print("The payback period could be as little as " + str(payback_years) + " years.")
     # annual_returns = [annual_cost_savings-cost_of_system]
@@ -51,6 +61,17 @@ def cost_saving():
     #     annual_returns.append(annual_cost_savings*i-cost_of_system)
     #     years.append(i)
     # axes[0].bar(years, annual_returns, color="#2596be")
+=======
+    print("This system could save as much as $" + str("{:.2f}".format(round(annual_cost_savings,2))) + " per Year" )
+    print("The payback period could be as little as " + str(round(payback_years,2)) + " years.")
+    annual_returns = [annual_cost_savings-cost_of_system]
+    years = [1]
+    axes = [figure.add_subplot(gs[2, :])]
+    for i in range (round(payback_years)+5):
+        annual_returns.append(annual_cost_savings*i-cost_of_system)
+        years.append(i)
+    axes[0].bar(years, annual_returns, color="#2596be")
+>>>>>>> origin/main
 
 # Used with the buttons to update the input variables
 def update_input (text, variable):
@@ -87,8 +108,8 @@ def redraw():
     
     annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
     annual_Energy = annual_avg_dni * 0.5471 * 0.22 * 365 # the *0.75 could be omitted. I'm not sure.
-    print("The average annual solar energy generated for zip code " + input_vars['zipcode'] + " is " + str(annual_Energy) + " kWh")
-    print("The average annual solar energy generated for latitude: " + lat + " and longitude: " + lon + " is " + str(round(annual_Energy,4)) + " kWh")
+    print("The average annual solar energy generated for zip code " + input_vars['zipcode'] + " is " + str(round(annual_Energy)) + " kWh")
+    print("The average annual solar energy generated for latitude: " + lat + " and longitude: " + lon + " is " + str(round(annual_Energy)) + " kWh")
     cost_saving()
     monthly_dni = data["outputs"]["avg_dni"]["monthly"]
     monthly_ghi = data["outputs"]["avg_ghi"]["monthly"]
@@ -103,10 +124,16 @@ def redraw():
         for rect, h in zip(rect2, monthly_ghi.values()):
             rect.set_height(h)
     
+<<<<<<< HEAD
     draw_output_text(annual_Energy, annual_cost_savings, payback_years)
     
     #text_subplot1.text(0.5, 0.5, "Annual Solar Generation: "+ str(annual_Energy) + " kWh", ha='center', va='center', fontsize=8)
     #text_subplot2.text(0.5, 0.5, "Annual Cost Savings: $"+ str(annual_cost_savings), ha='center', va='center', fontsize=8)
+=======
+    
+    text_subplot1.text(0.5, 0.5, "Annual Solar Generation: "+ str(round(annual_Energy)) + " kWh", ha='center', va='center', fontsize=8)
+    text_subplot2.text(0.5, 0.5, "Annual Cost Savings: $"+ str(round(annual_cost_savings,2)), ha='center', va='center', fontsize=8)
+>>>>>>> origin/main
     figure.canvas.draw_idle()
 
 axbox=plt.subplot(gs[9, :])
@@ -151,6 +178,19 @@ cost_box.on_submit(lambda text: update_input(text, 'cost'))
 axbox = plt.subplot(gs[9, :])
 time_box = TextBox(axbox, "Time", textalignment="center")
 time_box.on_submit(lambda text: update_input(text, 'time'))
+
+
+# Define a function to be called when the button is clicked
+def on_button_click(event):
+    compare.create_new_window()
+
+# Create a red button and specify its position and label
+button_ax = plt.axes([0.08, 0.89, 0.15, 0.08])  # [left, bottom, width, height]
+button = Button(button_ax, 'Compare', color='c')
+
+# Connect the button to the function
+button.on_clicked(on_button_click)
+
 
 #redraw()
 plt.show()
