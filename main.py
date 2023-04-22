@@ -21,7 +21,7 @@ input_vars = {'zipcode': None, 'surfaceArea': None, 'electricityCost': None, 'ef
 input_vars['zipcode'] = "56387"
 
 input_vars['surfaceArea'] = 20
-input_vars['electricityCost'] = 14.09 #Cost of power in Minnesota, Cents per kWh
+input_vars['electricityCost'] = 0.1409 #Cost of power in Minnesota, USD per kWh
 input_vars['efficiency'] = 18
 input_vars['cost'] = 20000
 input_vars['time'] = 365 #The length of a year, in days. Probably shouldn't be a variable.
@@ -56,7 +56,7 @@ def cost_saving():
     global annual_Energy
     global net_profit_graph
     global input_vars
-    annual_cost_savings = round(annual_Energy*float(input_vars['electricityCost'])/100,2)
+    annual_cost_savings = round(annual_Energy*float(input_vars['electricityCost']),2)
     payback_years = round(float(input_vars['cost'])/annual_cost_savings,2)
     print("This system could save as much as $" + str("{:.2f}".format(round(annual_cost_savings,2))) + " per Year" )
     print("The payback period could be as little as " + str(round(payback_years,2)) + " years.")
@@ -79,8 +79,8 @@ def cost_saving():
     axes[0].set_ylim([annual_returns[0]+(annual_returns[0]*0.2),annual_returns[-1]+(annual_returns[-1]*0.2)]) 
 
 # Used with the buttons to update the input variables
-def update_input (text, variable):
-    input_vars[variable] = text
+def update_input (text, variable, multiplier=1.0):
+    input_vars[variable] = str(float(text)*multiplier)
     print(variable, ':', input_vars[variable])
     #data = solar_data.get_data_from_zip(input_vars['zipcode'])
     redraw()
@@ -175,8 +175,8 @@ area_box.on_submit(lambda text: update_input(text, 'surfaceArea'))
 
 # Power rating
 axbox = plt.subplot(gs[6, :])
-power_box = TextBox(axbox, "Electricity Cost (¢/kWh)", textalignment="center", initial=input_vars['electricityCost'])
-power_box.on_submit(lambda text: update_input(text, 'electricityCost'))
+power_box = TextBox(axbox, "Electricity Cost (¢/kWh)", textalignment="center", initial=(input_vars['electricityCost'])*100)
+power_box.on_submit(lambda text: update_input(text, 'electricityCost', 0.01))
 
 # Efficency
 axbox = plt.subplot(gs[7, :])
