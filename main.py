@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import TextBox
 from matplotlib.widgets import Button
 import solar_data
+import compare
 
 # Creates a grid layout format for the buttons and graphs
 gs = plt.GridSpec(nrows=10, ncols=2, height_ratios=[8, 1, 8, 1, 1, 1, 1, 1, 1, 1], figure=None)
@@ -126,6 +127,19 @@ cost_box.on_submit(lambda text: update_input(text, 'cost'))
 axbox = plt.subplot(gs[9, :])
 time_box = TextBox(axbox, "Time", textalignment="center")
 time_box.on_submit(lambda text: update_input(text, 'time'))
+
+
+# Define a function to be called when the button is clicked
+def on_button_click(event):
+    compare.create_new_window()
+
+# Create a red button and specify its position and label
+button_ax = plt.axes([0.08, 0.89, 0.15, 0.08])  # [left, bottom, width, height]
+button = Button(button_ax, 'Compare', color='c')
+
+# Connect the button to the function
+button.on_clicked(on_button_click)
+
 
 #redraw()
 plt.show()
