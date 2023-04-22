@@ -20,11 +20,11 @@ input_vars = {'zipcode': None, 'surfaceArea': None, 'electricityCost': None, 'ef
 # TEMP: Set default value for zip code
 input_vars['zipcode'] = "56387"
 
-input_vars['surfaceArea'] = 20
-input_vars['electricityCost'] = 0.1409 #Cost of power in Minnesota, USD per kWh
-input_vars['efficiency'] = 18
-input_vars['cost'] = 20000
-input_vars['time'] = 365 #The length of a year, in days. Probably shouldn't be a variable.
+input_vars['surfaceArea'] = 20 #Square Meters
+input_vars['electricityCost'] = 0.1409 #Cost of power, USD per kWh (0.1409=Minnesota Average)
+input_vars['efficiency'] = 18 #Percent
+input_vars['cost'] = 20000 #US Dollars
+input_vars['time'] = 365 #The length of a year, in days. Probably shouldn't be a variable. It isn't user accessible anymore.
 
 
 lat = "40"
@@ -79,8 +79,12 @@ def cost_saving():
     axes[0].set_ylim([annual_returns[0]+(annual_returns[0]*0.2),annual_returns[-1]+(annual_returns[-1]*0.2)]) 
 
 # Used with the buttons to update the input variables
-def update_input (text, variable, multiplier=1.0):
-    input_vars[variable] = str(float(text)*multiplier)
+def update_input (text, variable):
+    if variable=='electricityCost':
+        input_vars[variable] = str(float(text)/100)
+    else:
+        input_vars[variable] = text
+    
     print(variable, ':', input_vars[variable])
     #data = solar_data.get_data_from_zip(input_vars['zipcode'])
     redraw()
@@ -176,7 +180,7 @@ area_box.on_submit(lambda text: update_input(text, 'surfaceArea'))
 # Power rating
 axbox = plt.subplot(gs[6, :])
 power_box = TextBox(axbox, "Electricity Cost (¢/kWh)", textalignment="center", initial=(input_vars['electricityCost'])*100)
-power_box.on_submit(lambda text: update_input(text, 'electricityCost', 0.01))
+power_box.on_submit(lambda text: update_input(text, 'electricityCost'))
 
 # Efficency
 axbox = plt.subplot(gs[7, :])
