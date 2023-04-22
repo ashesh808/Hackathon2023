@@ -21,7 +21,7 @@ input_vars = {'zipcode': None, 'surfaceArea': None, 'electricityCost': None, 'ef
 input_vars['zipcode'] = "56387"
 
 input_vars['surfaceArea'] = 20
-input_vars['electricityCost'] = 0.1409 #Cost of power in Minnesota, USD per kWh
+input_vars['electricityCost'] = 14.09 #Cost of power in Minnesota, Cents per kWh
 input_vars['efficiency'] = 18
 input_vars['cost'] = 20000
 input_vars['time'] = 365 #The length of a year, in days. Probably shouldn't be a variable.
@@ -56,7 +56,7 @@ def cost_saving():
     global annual_Energy
     global net_profit_graph
     global input_vars
-    annual_cost_savings = round(annual_Energy*float(input_vars['electricityCost']),2)
+    annual_cost_savings = round(annual_Energy*float(input_vars['electricityCost'])/100,2)
     payback_years = round(float(input_vars['cost'])/annual_cost_savings,2)
     print("This system could save as much as $" + str("{:.2f}".format(round(annual_cost_savings,2))) + " per Year" )
     print("The payback period could be as little as " + str(round(payback_years,2)) + " years.")
@@ -170,22 +170,22 @@ zipcode_box.on_submit(lambda text: update_input(text, 'zipcode'))
 
 # Surface area
 axbox = plt.subplot(gs[5, :])
-area_box = TextBox(axbox, "Surface Area", textalignment="center")
+area_box = TextBox(axbox, "Surface Area (m²)", textalignment="center", initial=input_vars['surfaceArea'])
 area_box.on_submit(lambda text: update_input(text, 'surfaceArea'))
 
 # Power rating
 axbox = plt.subplot(gs[6, :])
-power_box = TextBox(axbox, "Electricity Cost", textalignment="center")
+power_box = TextBox(axbox, "Electricity Cost (¢/kWh)", textalignment="center", initial=input_vars['electricityCost'])
 power_box.on_submit(lambda text: update_input(text, 'electricityCost'))
 
 # Efficency
 axbox = plt.subplot(gs[7, :])
-efficency_box = TextBox(axbox, "Efficiency", textalignment="center")
+efficency_box = TextBox(axbox, "Efficiency (%)", textalignment="center", initial=input_vars['efficiency'])
 efficency_box.on_submit(lambda text: update_input(text, 'efficiency'))
 
 # Cost
 axbox = plt.subplot(gs[8, :])
-cost_box = TextBox(axbox, "Cost", textalignment="center")
+cost_box = TextBox(axbox, "Cost (USD)", textalignment="center", initial=input_vars['cost'])
 cost_box.on_submit(lambda text: update_input(text, 'cost'))
 
 # Time
