@@ -83,10 +83,21 @@ def cost_saving():
 
 # Used with the buttons to update the input variables
 def update_input (text, variable):
+    global power_box
+    global utility_data
+    if input_vars[variable] == text:
+        #this var was already set to this
+        redraw()
+        return
     input_vars[variable] = text
     print(variable, ':', input_vars[variable])
     #data = solar_data.get_data_from_zip(input_vars['zipcode'])
-    redraw()
+    if variable == "zipcode":
+        utility_data = solar_data.get_utility_from_zip(text)
+        if utility_data is not None:
+            c = str(float(utility_data["outputs"]["residential"])*100)
+            power_box.set_val(c)
+    
     
 
 def draw_output_text(annual_Energy,annual_cost_savings,payback_years):

@@ -27,9 +27,12 @@ def add_cached_response(url, response):
     
     if response.status_code == 200:
         json_data[url] = response.json()
-        if json_data[url]["outputs"]["avg_dni"] != "no data":
+        if "avg_dni" in json_data[url]["outputs"] and json_data[url]["outputs"]["avg_dni"] != "no data":
             with open(CACHE_FILE, "w") as file:
-                #json.dump(json_data, file)
+                w_data = json.dumps(json_data)
+                file.write(w_data)
+        elif "residential" in json_data[url]["outputs"] and json_data[url]["outputs"]["residential"] != "no data":
+            with open(CACHE_FILE, "w") as file:
                 w_data = json.dumps(json_data)
                 file.write(w_data)
         else:
@@ -52,11 +55,11 @@ def get_data(request_url):
     return None
 
 def get_utility_from_zip(zip_code):
-    request_url = BASE_URL + "/api/utility_rates/v3.json?api_key=DEMO_KEY&address=" + zip_code
+    request_url = BASE_URL + "api/utility_rates/v3.json?api_key=DEMO_KEY&address=" + zip_code
     return get_data(request_url)
 
 def get_utility_from_lat_long(latitude, longitude):
-    request_url = BASE_URL + "/api/utility_rates/v3.json?api_key=DEMO_KEY&lat=" + latitude + "&lon=" + longitude
+    request_url = BASE_URL + "api/utility_rates/v3.json?api_key=DEMO_KEY&lat=" + latitude + "&lon=" + longitude
     return get_data(request_url)
 
 def get_data_from_lat_long(latitude, longitude):
