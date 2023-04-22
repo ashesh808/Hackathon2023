@@ -5,6 +5,7 @@ import solar_data
 import compare
 
 # Creates a grid layout format for the buttons and graphs
+
 gs = plt.GridSpec(nrows=12, ncols=2, height_ratios=[10, 2, 10, 2, 2, 2, 2, 2, 2, 2, 0 , 0], figure=None)
 figure = plt.figure()
 
@@ -44,6 +45,7 @@ rect2 = None
 annual_Energy = 0
 annual_cost_savings=0
 payback_years=0
+
 axes = [figure.add_subplot(gs[2, :])]
 net_profit_graph=axes[0].bar([1], [1], color="#2596be")
 
@@ -82,6 +84,7 @@ def update_input (text, variable):
     print(variable, ':', input_vars[variable])
     #data = solar_data.get_data_from_zip(input_vars['zipcode'])
     redraw()
+    
 
 def draw_output_text(annual_Energy,annual_cost_savings,payback_years):
     global ta#These objects are the output text.
@@ -141,6 +144,7 @@ def redraw():
             rect.set_height(h)
     draw_output_text(annual_Energy,annual_cost_savings,payback_years)
     
+
     
     #text_subplot1.text(0.5, 0.5, "Annual Solar Generation: "+ str(round(annual_Energy)) + " kWh", ha='center', va='center', fontsize=8)
     #text_subplot2.text(0.5, 0.5, "Annual Cost Savings: $"+ str(round(annual_cost_savings,2)), ha='center', va='center', fontsize=8)
@@ -192,7 +196,8 @@ time_box.on_submit(lambda text: update_input(text, 'time'))
 
 # Define a function to be called when the button is clicked
 def on_button_click(event):
-    fig=compare.create_new_window()
+    fig = compare.create_new_window()
+
 
 # Create a red button and specify its position and label
 button_ax = plt.axes([0.03, 0.89, 0.15, 0.08])  # [left, bottom, width, height]
@@ -201,6 +206,6 @@ button = Button(button_ax, 'Compare', color='c')
 # Connect the button to the function
 button.on_clicked(on_button_click)
 
-
+#compare.create_new_window()
 #redraw()
 plt.show()
