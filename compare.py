@@ -43,17 +43,24 @@ def update_plot1():
         plot4.remove()
         
     ax1.cla()
-    plot1, = ax1.plot(monthly_ghi1.keys(), monthly_dni1.values(), color = 'red', label = "DNI")
-    plot2, = ax1.plot(monthly_ghi2.keys(), monthly_dni2.values(), color = 'blue')
+    plot1, = ax1.plot(monthly_ghi1.keys(), monthly_dni1.values(), color = 'red', label = "Zip 1")
+    plot2, = ax1.plot(monthly_ghi2.keys(), monthly_dni2.values(), color = 'blue', label = "Zip 2")
+    ax1.legend(loc='best')
+    ax1.set_title('DNI Comparision')
+    ax1.set_ylabel('DNI value')
+    ax1.set_xlabel('Month')
+
 
     ax2.cla()
-    plot3, = ax2.plot(monthly_ghi1.keys(), monthly_ghi1.values(), color = 'red')
-    plot4, = ax2.plot(monthly_ghi2.keys(), monthly_ghi2.values(), color = 'blue')
-    
+    plot3, = ax2.plot(monthly_ghi1.keys(), monthly_ghi1.values(), color = 'red', label = "Zip 1")
+    plot4, = ax2.plot(monthly_ghi2.keys(), monthly_ghi2.values(), color = 'blue', label = "Zip 2")
+    ax2.legend(loc='best')
+    ax2.set_title('GHI Comparision')
+    ax2.set_ylabel('GHI value')
+    ax2.set_xlabel('Month')
+
     plt.draw()
     
-
-
 
 def zip1_submit_text(text):
     global zip1
@@ -75,29 +82,24 @@ def create_new_window():
     global ax1
     global ax2
     fig = plt.figure("Comparison")
-
     #drawplot1(fig)
     #drawplot2(fig)
-
     ax1 = fig.add_subplot(1, 2, 1)
     ax2 = fig.add_subplot(1, 2, 2) 
-
     axs2 = fig.add_axes([0.1, 0.89, 0.25, 0.06])
     axs3 = fig.add_axes([0.6, 0.89, 0.25, 0.06])
     zip_box1 = TextBox(axs2, 'Zip Code 1:', textalignment="center", initial=zip1)
     zip_box1.on_submit(zip1_submit_text)
     zip_box2 = TextBox(axs3, 'Zip Code 2:', textalignment="center", initial=zip2)
     zip_box2.on_submit(zip2_submit_text)
-
     # Second plot
     update_plot1()
-
     print("Shown!")
+    plt.subplots_adjust(top=0.75)
     plt.show()
     # this is good enough as is, it works well enough now
     plt.pause(100) #Ashesh's Mac works on 100, other seem to work on 10000
     print("Done showing")
-
     return fig
 
 if __name__ == "__main__":
