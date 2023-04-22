@@ -3,8 +3,13 @@ from matplotlib.widgets import TextBox
 import solar_data
 
 # Creates a grid layout format for the buttons and graphs
-gs = plt.GridSpec(nrows=10, ncols=2, height_ratios=[8, 1, 8, 1, 1, 1, 1, 1, 1, 1], figure=None)
+gs = plt.GridSpec(nrows=12, ncols=2, height_ratios=[8, 1, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1], figure=None)
 figure = plt.figure()
+
+text_subplot1 = figure.add_subplot(gs[10, :])
+text_subplot1.axis('off')
+text_subplot2 = figure.add_subplot(gs[11, :])
+text_subplot2.axis('off')
 
 # Holds all the input variables that are used in calculations and graphing
 input_vars = {'zipcode': None, 'surfaceArea': None, 'powerRating': None, 'efficiency': None, 'cost': None, 'time': None}
@@ -29,11 +34,6 @@ rect1 = None
 rect2 = None
 annual_Energy = 0
 annual_cost_savings=0
-
-ax=figure.add_axes([0.1, 0.05, 0.8, 0.075])
-ta=ax.text(0,-0.5, "Annual Solar Generation: "+ str(annual_Energy) + " kWh")
-tb=ax.text(0.35,-0.5, "Annual Cost Savings: $"+ str(annual_cost_savings))
-
 
 def cost_saving():
     grid_electricity_cost = 0.1409 #Cents per Kwh
@@ -84,8 +84,9 @@ def redraw():
         for rect, h in zip(rect2, monthly_ghi.values()):
             rect.set_height(h)
     
-    ta.set_text("Annual Solar Generation: "+ str(annual_Energy) + " kWh")
-    tb.set_text("Annaul Cost Savings: $"+ str(annual_cost_savings))
+    
+    text_subplot1.text(0.5, 0.5, "Annual Solar Generation: "+ str(annual_Energy) + " kWh", ha='center', va='center', fontsize=8)
+    text_subplot2.text(0.5, 0.5, "Annual Cost Savings: $"+ str(annual_cost_savings), ha='center', va='center', fontsize=8)
     figure.canvas.draw_idle()
 
 update_input("56387", 'zipcode')
