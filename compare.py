@@ -24,4 +24,4 @@ def create_new_window():
     x2 = [0, 1, 2, 3, 4, 5]
     y2 = [0, 1, 4, 9, 16, 25]
     ax2.plot(x2, y2)
-    plt.show()
+    plt.show()    

@@ -24,7 +24,7 @@ lon = "-105"
 
 # Energy = DNI x Area x Efficiency x Time
 # Where:
-#test
+# test
 # DNI is the Direct Normal Irradiance in W/m^2
 # Area is the surface area of the solar panel in m^2
 # Efficiency is the efficiency of the solar panel (usually given as a percentage)
@@ -88,8 +88,6 @@ def redraw():
             rect.set_height(h)
         for rect, h in zip(rect2, monthly_ghi.values()):
             rect.set_height(h)
-    
-    
     text_subplot1.text(0.5, 0.5, "Annual Solar Generation: "+ str(annual_Energy) + " kWh", ha='center', va='center', fontsize=8)
     text_subplot2.text(0.5, 0.5, "Annual Cost Savings: $"+ str(annual_cost_savings), ha='center', va='center', fontsize=8)
     figure.canvas.draw_idle()
