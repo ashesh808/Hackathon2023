@@ -13,9 +13,11 @@ def create_new_window():
     x1 = [1, 2, 3, 4, 5]
     y1 = [25, 16, 9, 4, 1]
     ax1.plot(x1, y1)
-   # Create two text boxes
-    zip1 = TextBox(plt.axes([0.1, 0.89, 0.25, 0.06]), 'Zip Code 1:')
-    zip2 = TextBox(plt.axes([0.6, 0.89, 0.25, 0.06]), 'Zip Code 2:')
+    # Create two text boxes
+    axs2 = plt.axes([0.1, 0.89, 0.25, 0.06])
+    axs3 = plt.axes([0.6, 0.89, 0.25, 0.06])
+    zip1 = TextBox(axs2, 'Zip Code 1:')
+    zip2 = TextBox(axs3, 'Zip Code 2:')
     # Set a callback function to be called when the user submits text
     zip1.on_submit(submit_text)
     zip2.on_submit(submit_text)
@@ -24,4 +26,5 @@ def create_new_window():
     x2 = [0, 1, 2, 3, 4, 5]
     y2 = [0, 1, 4, 9, 16, 25]
     ax2.plot(x2, y2)
+    print("Shown!")
     plt.show()
