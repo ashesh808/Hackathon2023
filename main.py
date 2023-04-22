@@ -54,7 +54,7 @@ def cost_saving():
 def update_input (text, variable):
     input_vars[variable] = text
     print(variable, ':', input_vars[variable])
-    data = solar_data.get_data_from_zip(input_vars['zipcode'])
+    #data = solar_data.get_data_from_zip(input_vars['zipcode'])
     redraw()
 
 def redraw():
