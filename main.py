@@ -5,7 +5,7 @@ import solar_data
 import compare
 
 # Creates a grid layout format for the buttons and graphs
-gs = plt.GridSpec(nrows=12, ncols=2, height_ratios=[8, 1, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1], figure=None)
+gs = plt.GridSpec(nrows=12, ncols=2, height_ratios=[8, 1, 8, 2, 2, 2, 2, 2, 2, 2, 2, 2], figure=None)
 figure = plt.figure()
 
 text_subplot1 = figure.add_subplot(gs[10, :])
@@ -42,8 +42,8 @@ def cost_saving():
     cost_of_system = 124.99+439.99 #Cost of total installation
     annual_cost_savings = round(annual_Energy*grid_electricity_cost,2)
     payback_years = round(cost_of_system/annual_cost_savings,2)
-    print("The cost savings from this system could be as much as $" + str(annual_cost_savings) + " Per Year" )
-    print("The payback period could be as little as " + str(payback_years) + " years.")
+    print("This system could save as much as $" + str("{:.2f}".format(round(annual_cost_savings,2))) + " per Year" )
+    print("The payback period could be as little as " + str(round(payback_years,2)) + " years.")
     annual_returns = [annual_cost_savings-cost_of_system]
     years = [1]
     axes = [figure.add_subplot(gs[2, :])]
@@ -73,8 +73,8 @@ def redraw():
     
     annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
     annual_Energy = annual_avg_dni * 0.5471 * 0.22 * 365 # the *0.75 could be omitted. I'm not sure.
-    print("The average annual solar energy generated for zip code " + input_vars['zipcode'] + " is " + str(annual_Energy) + " kWh")
-    print("The average annual solar energy generated for latitude: " + lat + " and longitude: " + lon + " is " + str(round(annual_Energy,4)) + " kWh")
+    print("The average annual solar energy generated for zip code " + input_vars['zipcode'] + " is " + str(round(annual_Energy)) + " kWh")
+    print("The average annual solar energy generated for latitude: " + lat + " and longitude: " + lon + " is " + str(round(annual_Energy)) + " kWh")
     cost_saving()
     monthly_dni = data["outputs"]["avg_dni"]["monthly"]
     monthly_ghi = data["outputs"]["avg_ghi"]["monthly"]
@@ -90,8 +90,8 @@ def redraw():
             rect.set_height(h)
     
     
-    text_subplot1.text(0.5, 0.5, "Annual Solar Generation: "+ str(annual_Energy) + " kWh", ha='center', va='center', fontsize=8)
-    text_subplot2.text(0.5, 0.5, "Annual Cost Savings: $"+ str(annual_cost_savings), ha='center', va='center', fontsize=8)
+    text_subplot1.text(0.5, 0.5, "Annual Solar Generation: "+ str(round(annual_Energy)) + " kWh", ha='center', va='center', fontsize=8)
+    text_subplot2.text(0.5, 0.5, "Annual Cost Savings: $"+ str(round(annual_cost_savings,2)), ha='center', va='center', fontsize=8)
     figure.canvas.draw_idle()
 
 update_input("56387", 'zipcode')
