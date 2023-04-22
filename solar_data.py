@@ -36,9 +36,7 @@ def add_cached_response(url, response):
             print("That data is bad!")
             del json_data[url]
 
-def get_data_from_zip(zip_code):
-    request_url = BASE_URL + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&address=" + zip_code
-    print("Looking for response with zip code == ", zip_code)
+def get_data(request_url):
     response = get_cached_response(request_url)
     if response == None:
         print("API CACHE: Given url not found in json cache! Sending get request. Url = ", request_url)
@@ -51,8 +49,22 @@ def get_data_from_zip(zip_code):
         print(f"Error: {response.status_code}")
     else:
         print("Unable to find a response! Invalid zip code?")
-    #data = json.loads(json.dumps(jsonData))
-    #return data
     return None
+
+def get_utility_from_zip(zip_code):
+    request_url = BASE_URL + "/api/utility_rates/v3.json?api_key=DEMO_KEY&address=" + zip_code
+    return get_data(request_url)
+
+def get_utility_from_lat_long(latitude, longitude):
+    request_url = BASE_URL + "/api/utility_rates/v3.json?api_key=DEMO_KEY&lat=" + latitude + "&lon=" + longitude
+    return get_data(request_url)
+
+def get_data_from_lat_long(latitude, longitude):
+    request_url = BASE_URL + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&lat=" + latitude + "&lon=" + longitude
+    return get_data(request_url)
+
+def get_data_from_zip(zip_code):
+    request_url = BASE_URL + "api/solar/solar_resource/v1.json?api_key=DEMO_KEY&address=" + zip_code
+    return get_data(request_url)
 
 initialize()
