@@ -60,6 +60,7 @@ def update_input (text, variable):
     print(variable, ':', input_vars[variable])
     #data = solar_data.get_data_from_zip(input_vars['zipcode'])
     redraw()
+    
 
 def draw_output_text(annual_Energy,annual_cost_savings,payback_years):
     global ta#These objects are the output text.
@@ -157,7 +158,7 @@ time_box.on_submit(lambda text: update_input(text, 'time'))
 
 # Define a function to be called when the button is clicked
 def on_button_click(event):
-    compare.create_new_window()
+    fig = compare.create_new_window()
 
 # Create a red button and specify its position and label
 button_ax = plt.axes([0.08, 0.89, 0.15, 0.08])  # [left, bottom, width, height]
@@ -166,6 +167,6 @@ button = Button(button_ax, 'Compare', color='c')
 # Connect the button to the function
 button.on_clicked(on_button_click)
 
-
+#compare.create_new_window()
 #redraw()
 plt.show()
