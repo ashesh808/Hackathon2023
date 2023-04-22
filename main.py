@@ -44,6 +44,9 @@ def redraw():
     global ta
     global tb
     data = solar_data.get_data_from_zip(zipcode)
+    if data == None:
+        return
+    
     annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
     annual_Energy = annual_avg_dni * 0.5471 * 0.22 * 365 # the *0.75 could be omitted. I'm not sure.
     print("The average annual solar energy generated for zip code " + zipcode + " is " + str(annual_Energy) + " kWh")
@@ -72,7 +75,7 @@ def update(zip):
     global annual_Energy
     global annual_cost_savings
     zipcode = zip
-    data = solar_data.get_data_from_zip(zipcode)
+    #data = solar_data.get_data_from_zip(zipcode)
     redraw()
 
 
