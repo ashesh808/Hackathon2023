@@ -54,7 +54,7 @@ def cost_saving():
 def update_input (text, variable):
     input_vars[variable] = text
     print(variable, ':', input_vars[variable])
-    data = solar_data.get_data_from_zip(input_vars['zipcode'])
+    #data = solar_data.get_data_from_zip(input_vars['zipcode'])
     redraw()
 
 def redraw():
@@ -66,6 +66,9 @@ def redraw():
     global ta
     global tb
     data = solar_data.get_data_from_zip(input_vars['zipcode'])
+    if data == None:
+        return
+    
     annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
     annual_Energy = annual_avg_dni * 0.5471 * 0.22 * 365 # the *0.75 could be omitted. I'm not sure.
     print("The average annual solar energy generated for zip code " + input_vars['zipcode'] + " is " + str(annual_Energy) + " kWh")
