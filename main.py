@@ -19,11 +19,11 @@ input_vars = {'zipcode': None, 'surfaceArea': None, 'electricityCost': None, 'ef
 # TEMP: Set default value for zip code
 input_vars['zipcode'] = "56387"
 
-input_vars['surfaceArea'] = 0.5
+input_vars['surfaceArea'] = 20
 input_vars['electricityCost'] = 0.1409 #Cost of power in Minnesota, USD per kWh
 input_vars['efficiency'] = 18
 input_vars['cost'] = 20000
-input_vars['time'] = 365
+input_vars['time'] = 365 #The length of a year, in days. Probably shouldn't be a variable.
 
 
 lat = "40"
@@ -115,7 +115,7 @@ def redraw():
     print(input_vars['time'])
 
     annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
-    annual_Energy = float(annual_avg_dni) * float(input_vars['surfaceArea']) * float((input_vars['efficiency'])/100) * float(input_vars['time']) # the *0.75 could be omitted. I'm not sure.
+    annual_Energy = float(annual_avg_dni) * float(input_vars['surfaceArea']) * float(input_vars['efficiency'])/100 * float(input_vars['time']) # the *0.75 could be omitted. I'm not sure.
     print("The average annual solar energy generated for zip code " + input_vars['zipcode'] + " is " + str(round(annual_Energy)) + " kWh")
     print("The average annual solar energy generated for latitude: " + lat + " and longitude: " + lon + " is " + str(round(annual_Energy)) + " kWh")
     cost_saving()
@@ -175,7 +175,7 @@ power_box.on_submit(lambda text: update_input(text, 'electricityCost'))
 # Efficency
 axbox = plt.subplot(gs[7, :])
 efficency_box = TextBox(axbox, "Efficency", textalignment="center")
-efficency_box.on_submit(lambda text: update_input(text, 'efficency'))
+efficency_box.on_submit(lambda text: update_input(text, 'efficiency'))
 
 # Cost
 axbox = plt.subplot(gs[8, :])
@@ -190,7 +190,7 @@ time_box.on_submit(lambda text: update_input(text, 'time'))
 
 # Define a function to be called when the button is clicked
 def on_button_click(event):
-    compare.create_new_window()
+    fig=compare.create_new_window()
 
 # Create a red button and specify its position and label
 button_ax = plt.axes([0.04, 0.89, 0.15, 0.08])  # [left, bottom, width, height]
