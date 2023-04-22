@@ -5,7 +5,7 @@ import solar_data
 import compare
 
 # Creates a grid layout format for the buttons and graphs
-gs = plt.GridSpec(nrows=12, ncols=2, height_ratios=[10, 2, 10, 1, 2, 2, 2, 2, 2, 2, 0, 0], figure=None)
+gs = plt.GridSpec(nrows=12, ncols=2, height_ratios=[10, 2, 10, 2, 2, 2, 2, 2, 2, 2, 0 , 0], figure=None)
 figure = plt.figure()
 
 #text_subplot1 = figure.add_subplot(gs[10, :])
@@ -71,7 +71,9 @@ def cost_saving():
     net_profit_graph=axes[0].bar(years, annual_returns, color="#2596be")
     print(annual_returns)
     axes[0].set_title('Net Profit USD')
-    axes[0].set_xlim([(payback_years*-0.01)+0.5,years[-1]+0.5+payback_years*0.01])   
+    axes[0].set_xlabel('Years')
+    axes[0].set_ylabel('Net Profit ($)')
+    axes[0].set_xlim([0.5,years[-1]+0.5+payback_years*0.01])   
     axes[0].set_ylim([annual_returns[0]+(annual_returns[0]*0.2),annual_returns[-1]+(annual_returns[-1]*0.2)]) 
 
 # Used with the buttons to update the input variables
@@ -125,13 +127,13 @@ def redraw():
     if rect1 is None or rect2 is None:
         axes = [figure.add_subplot(gs[0, 0]), figure.add_subplot(gs[0, 1])]
         rect1 = axes[0].bar(monthly_dni.keys(), monthly_dni.values())
-        axes[0].set_title('monthly Average DNI value')
+        axes[0].set_title('Monthly Average Direct Normal Irradiance')
         axes[0].set_ylabel('DNI value')
         axes[0].set_xlabel('Month')
         rect2 = axes[1].bar(monthly_ghi.keys(), monthly_ghi.values())
         axes[1].set_ylabel('GHI value')
         axes[1].set_xlabel('Month')
-        axes[1].set_title('monthly Average GHI value')
+        axes[1].set_title('Monthly Average Global Horizontal Irradiance')
     else:
         for rect, h in zip(rect1, monthly_dni.values()):
             rect.set_height(h)
@@ -174,7 +176,7 @@ power_box.on_submit(lambda text: update_input(text, 'electricityCost'))
 
 # Efficency
 axbox = plt.subplot(gs[7, :])
-efficency_box = TextBox(axbox, "Efficency", textalignment="center")
+efficency_box = TextBox(axbox, "Efficiency", textalignment="center")
 efficency_box.on_submit(lambda text: update_input(text, 'efficiency'))
 
 # Cost
@@ -193,7 +195,7 @@ def on_button_click(event):
     fig=compare.create_new_window()
 
 # Create a red button and specify its position and label
-button_ax = plt.axes([0.04, 0.89, 0.15, 0.08])  # [left, bottom, width, height]
+button_ax = plt.axes([0.03, 0.89, 0.15, 0.08])  # [left, bottom, width, height]
 button = Button(button_ax, 'Compare', color='c')
 
 # Connect the button to the function
