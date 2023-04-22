@@ -7,12 +7,7 @@ import compare
 # Creates a grid layout format for the buttons and graphs
 
 gs = plt.GridSpec(nrows=12, ncols=2, height_ratios=[10, 2, 10, 2, 2, 2, 2, 2, 2, 2, 0 , 0], figure=None)
-figure = plt.figure()
-
-#text_subplot1 = figure.add_subplot(gs[10, :])
-#text_subplot1.axis('off')
-#text_subplot2 = figure.add_subplot(gs[11, :])
-#text_subplot2.axis('off')
+figure = plt.figure("Solar Calculator")
 
 # Holds all the input variables that are used in calculations and graphing
 input_vars = {'zipcode': None, 'surfaceArea': None, 'electricityCost': None, 'efficiency': None, 'cost': None, 'time': None}
@@ -63,9 +58,6 @@ def cost_saving():
     print("The payback period could be as little as " + str(round(payback_years,2)) + " years.")
     annual_returns = [annual_cost_savings-float(input_vars['cost'])]
     years = [1]
-    #years.clear()
-    #years = [1]
-    #axes[0].autoscale()#doesn't seem to work for some reason.
     net_profit_graph.remove()
     for i in range (round(payback_years)+5):
         annual_returns.append(annual_cost_savings*i-float(input_vars['cost']))
@@ -181,21 +173,7 @@ def redraw():
     axes2[1].set_ylabel('GHI value')
     axes2[1].set_xlabel('Month')
     axes2[1].set_title('Monthly Average Global Horizontal Irradiance')
-    
-    # else:
-    #     axes = [figure.add_subplot(gs[0, 0]), figure.add_subplot(gs[0, 1])]
-    #     for rect, h in zip(rect1, monthly_dni.values()):
-    #         rect.set_height(h)
-    #     for rect, h in zip(rect2, monthly_ghi.values()):
-    #         rect.set_height(h)
-    #     axes[0].set_ylim([0,max(monthly_dni.values())])
-    #     axes[1].set_ylim([0,max(monthly_ghi.values)])
     draw_output_text(annual_Energy,annual_cost_savings,payback_years)
-    
-
-    
-    #text_subplot1.text(0.5, 0.5, "Annual Solar Generation: "+ str(round(annual_Energy)) + " kWh", ha='center', va='center', fontsize=8)
-    #text_subplot2.text(0.5, 0.5, "Annual Cost Savings: $"+ str(round(annual_cost_savings,2)), ha='center', va='center', fontsize=8)
     figure.canvas.draw_idle()
 
 axbox=plt.subplot(gs[8, :])#Necessary to anchor the ta,tb,tc. 
@@ -241,11 +219,6 @@ efficency_box.on_submit(lambda text: update_input(text, 'efficiency'))
 axbox = plt.subplot(gs[9, :])
 cost_box = TextBox(axbox, "Cost (USD)", textalignment="center", initial=input_vars['cost'])
 cost_box.on_submit(lambda text: update_input(text, 'cost'))
-
-# Time
-#axbox = plt.subplot(gs[9, :])
-#time_box = TextBox(axbox, "Time", textalignment="center")
-#time_box.on_submit(lambda text: update_input(text, 'time'))
 
 update_input("56387", 'zipcode')
 
