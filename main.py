@@ -42,6 +42,9 @@ monthly_ghi = None
 
 rect1 = None
 rect2 = None
+rect3 = None
+text_label1 = None
+text_label2 = None
 annual_Energy = 0
 annual_cost_savings=0
 payback_years=0
