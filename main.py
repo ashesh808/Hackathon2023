@@ -6,7 +6,7 @@ import compare
 
 # Creates a grid layout format for the buttons and graphs
 
-gs = plt.GridSpec(nrows=12, ncols=2, height_ratios=[10, 2, 10, 2, 2, 2, 2, 2, 2, 2, 0 , 0], figure=None)
+gs = plt.GridSpec(nrows=12, ncols=2, height_ratios=[10, 2, 10, 2, 2, 2, 2, 2, 2, 0, 0 , 0], figure=None)
 figure = plt.figure()
 
 #text_subplot1 = figure.add_subplot(gs[10, :])
@@ -150,7 +150,7 @@ def redraw():
     #text_subplot2.text(0.5, 0.5, "Annual Cost Savings: $"+ str(round(annual_cost_savings,2)), ha='center', va='center', fontsize=8)
     figure.canvas.draw_idle()
 
-axbox=plt.subplot(gs[9, :])
+axbox=plt.subplot(gs[8, :])#Necessary to anchor the ta,tb,tc. 
 
 ta=axbox.text(0,-0.5, "Annual Solar Generation: "+ str(round(annual_Energy,4)) + " kWh")
 tb=axbox.text(0.35,-0.5, "Annual Cost Savings: $"+ str(annual_cost_savings))
@@ -189,9 +189,9 @@ cost_box = TextBox(axbox, "Cost", textalignment="center")
 cost_box.on_submit(lambda text: update_input(text, 'cost'))
 
 # Time
-axbox = plt.subplot(gs[9, :])
-time_box = TextBox(axbox, "Time", textalignment="center")
-time_box.on_submit(lambda text: update_input(text, 'time'))
+#axbox = plt.subplot(gs[9, :])
+#time_box = TextBox(axbox, "Time", textalignment="center")
+#time_box.on_submit(lambda text: update_input(text, 'time'))
 
 
 # Define a function to be called when the button is clicked
