@@ -5,7 +5,7 @@ import solar_data
 import compare
 
 # Creates a grid layout format for the buttons and graphs
-gs = plt.GridSpec(nrows=12, ncols=2, height_ratios=[10, 1, 10, 1, 2, 2, 2, 2, 2, 2, 0, 0], figure=None)
+gs = plt.GridSpec(nrows=12, ncols=2, height_ratios=[10, 2, 10, 1, 2, 2, 2, 2, 2, 2, 0, 0], figure=None)
 figure = plt.figure()
 
 #text_subplot1 = figure.add_subplot(gs[10, :])
@@ -18,6 +18,13 @@ input_vars = {'zipcode': None, 'surfaceArea': None, 'powerRating': None, 'effici
 
 # TEMP: Set default value for zip code
 input_vars['zipcode'] = "56387"
+
+input_vars['surfaceArea'] = 0.5
+input_vars['powerRating'] = 100
+input_vars['efficiency'] = 18
+input_vars['cost'] = 20000
+input_vars['time'] = 365
+
 
 lat = "40"
 lon = "-105"
@@ -59,6 +66,7 @@ def cost_saving():
         annual_returns.append(annual_cost_savings*i-cost_of_system)
         years.append(i)
     net_profit_graph=axes[0].bar(years, annual_returns, color="#2596be")
+    axes[0].set_title('Net Profit USD')
 
 # Used with the buttons to update the input variables
 def update_input (text, variable):
@@ -80,6 +88,7 @@ def draw_output_text(annual_Energy,annual_cost_savings,payback_years):
     tc=axbox.text(0.7,-0.5, "Break-Even Time: " + str(payback_years) + " years.")
 
 def redraw():
+    global input_vars
     global rect1
     global rect2
     global data
@@ -93,8 +102,14 @@ def redraw():
     if data == None:
         return
     
+    print(input_vars['surfaceArea'])
+    print(input_vars['powerRating'])
+    print(input_vars['efficiency'])
+    print(input_vars['cost'])
+    print(input_vars['time'])
+
     annual_avg_dni = float(data['outputs']['avg_dni']['annual'])
-    annual_Energy = annual_avg_dni * 0.5471 * 0.22 * 365 # the *0.75 could be omitted. I'm not sure.
+    annual_Energy = float(annual_avg_dni) * float(input_vars['surfaceArea']) * float((input_vars['efficiency'])/100) * float(input_vars['time']) # the *0.75 could be omitted. I'm not sure.
     print("The average annual solar energy generated for zip code " + input_vars['zipcode'] + " is " + str(round(annual_Energy)) + " kWh")
     print("The average annual solar energy generated for latitude: " + lat + " and longitude: " + lon + " is " + str(round(annual_Energy)) + " kWh")
     cost_saving()
@@ -104,7 +119,13 @@ def redraw():
     if rect1 is None or rect2 is None:
         axes = [figure.add_subplot(gs[0, 0]), figure.add_subplot(gs[0, 1])]
         rect1 = axes[0].bar(monthly_dni.keys(), monthly_dni.values())
+        axes[0].set_title('monthly Average DNI value')
+        axes[0].set_ylabel('DNI value')
+        axes[0].set_xlabel('Month')
         rect2 = axes[1].bar(monthly_ghi.keys(), monthly_ghi.values())
+        axes[1].set_ylabel('GHI value')
+        axes[1].set_xlabel('Month')
+        axes[1].set_title('monthly Average GHI value')
     else:
         for rect, h in zip(rect1, monthly_dni.values()):
             rect.set_height(h)
@@ -166,7 +187,7 @@ def on_button_click(event):
     compare.create_new_window()
 
 # Create a red button and specify its position and label
-button_ax = plt.axes([0.08, 0.89, 0.15, 0.08])  # [left, bottom, width, height]
+button_ax = plt.axes([0.04, 0.89, 0.15, 0.08])  # [left, bottom, width, height]
 button = Button(button_ax, 'Compare', color='c')
 
 # Connect the button to the function
