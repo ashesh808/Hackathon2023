@@ -5,13 +5,13 @@ import solar_data
 import compare
 
 # Creates a grid layout format for the buttons and graphs
-gs = plt.GridSpec(nrows=12, ncols=2, height_ratios=[8, 1, 8, 2, 2, 2, 2, 2, 2, 2, 2, 2], figure=None)
+gs = plt.GridSpec(nrows=12, ncols=2, height_ratios=[10, 1, 10, 1, 2, 2, 2, 2, 2, 2, 0, 0], figure=None)
 figure = plt.figure()
 
-text_subplot1 = figure.add_subplot(gs[10, :])
-text_subplot1.axis('off')
-text_subplot2 = figure.add_subplot(gs[11, :])
-text_subplot2.axis('off')
+#text_subplot1 = figure.add_subplot(gs[10, :])
+#text_subplot1.axis('off')
+#text_subplot2 = figure.add_subplot(gs[11, :])
+#text_subplot2.axis('off')
 
 # Holds all the input variables that are used in calculations and graphing
 input_vars = {'zipcode': None, 'surfaceArea': None, 'powerRating': None, 'efficiency': None, 'cost': None, 'time': None}
@@ -43,6 +43,8 @@ net_profit_graph=axes[0].bar([1], [1], color="#2596be")
 def cost_saving():
     global payback_years
     global axes
+    global annual_cost_savings
+    global annual_Energy
     global net_profit_graph
     grid_electricity_cost = 0.1409 #Cents per Kwh
     cost_of_system = 124.99+439.99 #Cost of total installation
@@ -108,10 +110,11 @@ def redraw():
             rect.set_height(h)
         for rect, h in zip(rect2, monthly_ghi.values()):
             rect.set_height(h)
+    draw_output_text(annual_Energy,annual_cost_savings,payback_years)
     
     
-    text_subplot1.text(0.5, 0.5, "Annual Solar Generation: "+ str(round(annual_Energy)) + " kWh", ha='center', va='center', fontsize=8)
-    text_subplot2.text(0.5, 0.5, "Annual Cost Savings: $"+ str(round(annual_cost_savings,2)), ha='center', va='center', fontsize=8)
+    #text_subplot1.text(0.5, 0.5, "Annual Solar Generation: "+ str(round(annual_Energy)) + " kWh", ha='center', va='center', fontsize=8)
+    #text_subplot2.text(0.5, 0.5, "Annual Cost Savings: $"+ str(round(annual_cost_savings,2)), ha='center', va='center', fontsize=8)
     figure.canvas.draw_idle()
 
 axbox=plt.subplot(gs[9, :])
